@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {{template  "header"}}
+    <title>文章 - 我的Beego博客</title>
+</head>
+<body>
+{{template "nav".}}
+
+<div class="container">
+
+    {{template  "article_nav".}}
+
+    <div class="col-md-10">
+
+    <table class="table table-striped">
+        <thead>
+
+        <th>#</th>
+        <th>文章名称</th>
+        <th>最后更新</th>
+        <th>浏览</th>
+        <th>回复数</th>
+        <th>操作</th>
+
+        </thead>
+
+
+        <tbody>
+            {{range .topics}}
+
+            <tr>
+                <td>{{.Id}}</td>
+                <td>{{.Title}}</td>
+                <td>{{TimeParseString .Updated}}</td>
+                <td>  {{.Views}}</td>
+                <td>{{.ReplyCount}}</td>
+
+                <td><div class="dropdown">
+                        <button class="btn btndefault dropdown-toggle" data-toggle="dropdown" role="button">操作
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="/topic/delete/{{.Id}}">删除文章</a></li>
+                            <li><a href="/topic/edit/{{.Id}}">修改文章</a></li>
+                            <li><a href="/topic/top">置顶文章</a></li>
+                        </ul>
+                    </div></td>
+            </tr>
+          {{end}}
+
+        </tbody>
+    </table>
+    </div>
+</div>
+<script>
+    function checkInput() {
+        if ($("#Title").val() == "") {
+            alert("请输入分类名称")
+            return false
+        }
+    }
+</script>
+
+</body>
+</html>

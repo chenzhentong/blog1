@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    {{template "header" .}}
+
+
+    <title>{{with .topic}}{{.Title}}{{end}}- 我的Beego博客</title>
+
+    <!-- <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <!--  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+    <!--  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+    <style>
+        .page {
+            border: 1px solid #DDDDDD;
+            line-height: 30px;
+            padding-left: 10px;
+
+        }
+
+        .page-header {
+            height: 80px;
+            overflow: hidden;
+            margin: 0px;
+
+
+        }
+
+        .continue_read {
+            padding-top: 10px;
+        }
+
+        .commentTopic {
+            border: 1px solid #DDDDDD;
+            margin-top: 10px;
+
+            padding: 10px;
+
+        }
+
+        #comments {
+            border: 1px solid #DDDDDD;
+            margin-top: 10px;
+            padding: 10px;
+
+        }
+
+        .comment {
+            height: 50px;
+            border-top: 1px solid #DDDDDD;
+            padding-top: 10px;
+        }
+
+        .agree {
+            line-height: 30px;
+            padding: 10px;
+            border-bottom: 1px solid #DDDDDD;
+            padding-right: 50px;
+        }
+
+    </style>
+</head>
+<body>
+{{template "nav" .}}
+
+<div class="container">
+    <div class="col-md-9">
+
+        {{with .topic}}
+            <div class="page">
+
+
+                <div class="page-header" class="col-md-12">
+                    <h3>{{.Title}}</h3>
+                    <h6 class="text-muted">文章发表于{{TimeParseString  .Created}}，共有{{.Views}}次浏览，{{.ReplyCount}}个评论</h6>
+
+
+                </div>
+
+                <div class="page_content" class="col-md-12">
+
+
+                    {{str2html .Content}}
+                </div>
+
+            </div>
+            <div class="commentTopic">
+                <h3>发布评论</h3>
+                <form action="/comment/{{.Id}}" method="post">
+                    <div class="col-md-12">
+
+                        <input type="text" name="Name" placeholder="您的昵称" class="form-control"><br>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" name="Email" placeholder="您的邮箱" class="form-control">
+
+
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <br>
+
+                        <input type="text" name="Website" placeholder="您的网站" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <br>
+
+                        <textarea cols="30" rows="4" name="Content" placeholder="留言内容" class="form-control"></textarea>
+                    </div>
+                        <input type="submit" value="发表评论" class="btn btn-primary"  >
+
+
+                </form>
+            </div>
+        {{end}}
+        <div id="comments">
+            <h3>网友评论</h3>
+            {{if IsArrayNull .comments}}
+
+                暂时没有评论
+            {{end}}
+            {{range .comments}}
+                <div class="comment" class="col-md-12">
+                    <div class="col-md-1">
+                        <img src="/static/img/girl1.jpg" class="img-circle">
+                    </div>
+                    <div class="col-md-7">
+                        <a href="#">{{.Name}}</a><br>{{.Content}}
+                    </div>
+                    <div class="col-md-4">
+                        {{TimeParseString  .CreatedTime}}
+                    </div>
+                </div>
+                <div class="agree">
+                    <p class="text-right"><a href=""><i class="fa fa-thumbs-o-up"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                href=""><i class="fa fa-thumbs-o-down"></i></a></p>
+                </div>
+            {{end}}
+
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

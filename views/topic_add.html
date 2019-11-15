@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{template "header"}}
+    <meta charset="UTF-8">
+    <title>添加文章 - 我的博客</title>
+    <link rel="stylesheet" href="/static/css/wangEditor.css">
+</head>
+<body>
+    {{template "nav".}}
+    <div class="container">
+
+        {{template  "article_nav".}}
+        <div class="col-md-10">
+        <form action="/topic/add" method="post" onsubmit="return CheckAndSet()" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>文章标题:</label>
+                <input type="text" name="Title" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>文章分类:</label>
+                <select name="Category">
+                    {{range .categories}}
+                        <option value="{{.Id}}" >{{.Title}}</option>
+                    {{end}}
+
+                </select>
+
+
+            </div>
+            <div class="form-group">
+                <label>附件</label>
+                <input type="file" name="attachment" onchange="checkPhoto(this)"  >
+            </div>
+            <div class="form-group">
+                <label>文章内容:</label>
+
+                <div id="div1"  >
+                </div>
+                <textarea id="text1" style="width:100%; height:200px;" name="Content"></textarea>
+
+            </div>
+            <input type="submit" value="添加" class="btn btn-default">
+        </form>
+        </div>
+    </div>
+    <script>
+        //图片校验
+        function  checkPhoto(obj){
+            fileAllPath=$(obj).val()
+            suffix=fileAllPath.toLowerCase().split(".")
+           //alert(fileAllPath+" "+suffix[1])
+           if(suffix[1]!="png" &&suffix[1]!="jpg" &&suffix[1]!="gif"&&suffix[1]!="jpeg"){
+               alert("请上传.png、.jpg、.gif或.jpeg格式的图片")
+               $(obj).val("")
+               return
+           }
+           var fileData= obj.files[0]
+            var size=fileData.size/(1024*1024)
+           if (size>1){
+               alert("请上传大小小于1MB的图片")
+               $(obj).val("")
+               return
+           }
+        }
+    </script>
+    <script src="/static/js/wangEditor.min.js"></script>
+    <script >
+        var E = window.wangEditor
+        var editor = new E('#div1')
+        var $text1 = $('#text1')
+        editor.customConfig.onchange = function (html) {
+            // 监控变化，同步更新到 textarea
+            $text1.val(html)
+        }
+        editor.create()
+        // 初始化 textarea 的值
+        $text1.val(editor.txt.html())
+    </script>
+
+
+
+</body>
+</html>

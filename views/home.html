@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{template "header" .}}
+    <link rel="stylesheet" href="/static/css/calendar.css">
+    <script src="/static/js/calendar.js"></script>
+    <title>首页 - 我的Beego博客</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+
+
+</head>
+<body>
+{{template "nav" .}}
+<div class="container">
+    <div class="col-md-8">
+        {{range .topics}}
+            <div class="page">
+
+
+                <div class="page-header" class="col-md-12">
+                    <h3><a href="/topic/detail/{{.Id}}" class="title_font">{{.Title}}</a></h3>
+                    <h6 class="text-muted"><i class="fa fa-clock-o"></i>&nbsp;{{TimeParseString .Created}}&nbsp;&nbsp;&nbsp;<i
+                                class="fa fa-eye"></i>阅读({{.Views}})&nbsp;&nbsp;&nbsp;<i
+                                class="fa fa-comment"></i>评论({{.ReplyCount}})&nbsp;
+                        <a href=""><i class="fa fa-thumbs-o-up"></i>&nbsp;赞(1)</a>
+                    </h6>
+
+
+                </div>
+                <div class="page_content" class="col-md-11">
+
+
+                    {{str2html .Content}}
+                </div>
+                <div class="continue_read"><p><a href="/topic/detail/{{.Id}}">继续阅读</a></p></div>
+            </div>
+        {{end}}
+        <div class="text-center">
+            {{if JudgeCategory .flag  }}
+                {{if gt .pageNow 1}}
+                    <button onclick="location.href='http://127.0.0.1:8081/{{Add .pageNow -1}}/category/{{.id}}'" class="btn btn-primary">上一页</button>
+
+                {{else}}
+                    <button class="btn btn-default" >上一页</button>
+                {{end}}
+                {{if lt .pageNow .pageCount}}
+                    <button onclick="location.href='http://127.0.0.1:8081/{{Add .pageNow 1}}/category/{{.id}}'" class="btn btn-primary">下一页</button>
+
+                {{else}}
+                    <button class="btn btn-default" >下一页</button>
+
+                {{end}}
+            {{else if JudgeMonth .flag}}
+                {{if gt .pageNow 1}}
+                    <button onclick="location.href='http://127.0.0.1:8081/{{Add .pageNow -1}}/month/{{.id}}'" class="btn btn-primary">上一页</button>
+                {{else}}
+
+                    <button class="btn btn-default" >上一页</button>
+                {{end}}
+                {{if lt .pageNow .pageCount}}
+                    <button onclick="location.href='http://127.0.0.1:8081/{{Add .pageNow 1}}/month/{{.id}}'" class="btn btn-primary">下一页</button>
+
+                {{else}}
+
+                    <button class="btn btn-default" >下一页</button>
+
+                {{end}}
+            {{else }}
+
+                {{if gt .pageNow 1}}
+                    <button onclick="location.href='http://127.0.0.1:8081/{{Add .pageNow -1}}/{{.cid}}'" class="btn btn-primary">上一页</button>
+
+                {{else}}
+
+
+                    <button class="btn btn-default" >上一页</button>
+                {{end}}
+                {{if lt .pageNow .pageCount}}
+                    <button onclick="location.href='http://127.0.0.1:8081/{{Add .pageNow 1}}/{{.cid}}'" class="btn btn-primary">下一页</button>
+
+                {{else}}
+
+                    <button class="btn btn-default" >下一页</button>
+
+                {{end}}
+
+            {{end}}
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3" id="topic_sort">
+
+        <div id="calendar" class="col-md-12" class="calendar"></div>
+
+        <div class="title1" class="col-md-12">随笔分类(Category) <i class="fa fa-tags"></i></div>
+        <div class="col-md-12">
+            <div class="items" class="clearfix">
+                {{range .categories}}
+                    <a href="/1/category/{{.Id}}">{{.Title}} ({{.TopicCount}})</a>
+                {{end}}
+            </div>
+        </div>
+        <div class="title1" class="col-md-12"><br>随笔档案(Archive) <i class="fa fa-archive"></i></div>
+        <div class="col-md-12">
+            <dl class="items2">
+                {{range .topicRecords}}
+                    <dd class="item2"><a href="/1/month/{{.Year}}"> {{.Year}}({{.Count}})</a></dd>
+                {{end}}
+            </dl>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+
+
+</html>
